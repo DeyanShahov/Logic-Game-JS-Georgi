@@ -99,4 +99,46 @@ function setParameters(inputNumber){
     secondMassive = secondParameter.toString().split('').reverse().map(Number);
 }
 
-setParameters()
+function generateExpression() {
+
+    var letters = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i))
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 10);
+  
+    var letterToDigit = {};
+    letters.forEach((letter, index) => {
+      letterToDigit[index] = letter;
+    });
+  
+    var firstExpression = convertDigitsToLetter(firstParameter, letterToDigit);
+    var secondExpression = convertDigitsToLetter(secondParameter, letterToDigit);
+  
+    var expression = firstExpression + ' * ' + secondExpression;
+  
+    var rowLength = expression.length;
+    var output = '';
+  
+    output += expression + '<br/>';
+    output += '-'.repeat(rowLength) + '<br/>';
+  
+    for (var i = 0; i < secondMassive.length; i++) {
+      var sum = firstParameter * secondMassive[i];
+      output += ' '.repeat(rowLength - sum.toString().length - i) + convertDigitsToLetter(sum, letterToDigit) + '<br/>';
+    }
+  
+    output += '-'.repeat(rowLength) + '<br/>';
+    output += ' '.repeat(rowLength - result.toString().length) + convertDigitsToLetter(result, letterToDigit);
+  
+    document.getElementById('expression').innerHTML = output;
+}
+
+function convertDigitsToLetter(number, letterToDigit) {
+    var toPrint = '';
+    number.toString().split('').forEach(function (n) {
+      toPrint += letterToDigit[parseInt(n)];
+    });
+    return toPrint;
+}
+
+//setParameters();
+//generateExpression();

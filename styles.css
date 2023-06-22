@@ -1,0 +1,11 @@
+.container {
+    display: inline-block;
+    border-bottom: 2px solid black;
+    padding-bottom: 5px;
+}
+  
+.letters {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+}
