@@ -121,43 +121,20 @@ function generateExpression() {
 
   
     var rowLength = expression.length;
-    //var output = '';
-  
-    //output += expression;// + '<br/>';
-    //output += ' '.repeat(rowLength);// + '<br/>';
   
     for (var i = 0; i < secondMassive.length; i++) {
       var sum = firstParameter * secondMassive[i];
       var textResult = ' '.repeat(rowLength - sum.toString().length - i) + convertDigitsToLetter(sum, letterToDigit);// + '<br/>';
-      //output += textResult;
       var subArray = textResult.split('');
       letterMatrix.push(subArray);
     }
   
-    //output += ' '.repeat(rowLength);// + '<br/>';
+
     var textResult = ' '.repeat(rowLength - result.toString().length) + convertDigitsToLetter(result, letterToDigit);
-    //output += textResult;
+
     letterMatrix.push(textResult.split(''))
 
     letterMatrix[Math.ceil(secondMassive.length / 2)][0] = '+';
-  
-    //document.getElementById('expression').innerHTML = output;
-
-
-    //const text = "ABV * FHT";
-    const outputDiv = document.getElementById("output");
-    const span = document.createElement("span");
-    
-    
-    for (let i = 0; i < expression.length; i++) {
-      const letter = expression[i];
-      const span = document.createElement("span");
-    
-      span.classList.add("underline");
-    
-      span.textContent = letter;
-      outputDiv.appendChild(span);
-    }
 
     const table = document.querySelector('table');
 
