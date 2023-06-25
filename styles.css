@@ -10,7 +10,7 @@
     font-weight: bold;
 }
 
-.underline {
+/* .underline {
     text-decoration: underline;
 }
 
@@ -20,4 +20,18 @@
 
 .underline-column {
     border-top: 1px solid black;
+} */
+
+table {
+    border-collapse: collapse;
+}
+  
+td {
+    padding: 10px;
+    border: 1px solid white;
+}
+
+/* Промяна на границата между първия и втория ред */
+.border-between-rows {
+    border-bottom: 3px solid black;
 }

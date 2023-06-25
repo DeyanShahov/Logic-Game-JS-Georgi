@@ -115,16 +115,18 @@ function generateExpression() {
     
     var expression = firstExpression + ' * ' + secondExpression;
 
-    var letterMatrix = []; // Prazen array za badeshtata tablica
+    // Prazen array za badeshtata tablica
+    var letterMatrix = []; 
 
-    letterMatrix.push(expression.split('')); //Adva parviq sub array sadarjasht parviq red s umnojenieto na dvete chisla
+    //Adva parviq sub array sadarjasht parviq red s umnojenieto na dvete chisla
+    letterMatrix.push(expression.split('')); 
 
   
     var rowLength = expression.length;
   
     for (var i = 0; i < secondMassive.length; i++) {
       var sum = firstParameter * secondMassive[i];
-      var textResult = ' '.repeat(rowLength - sum.toString().length - i) + convertDigitsToLetter(sum, letterToDigit);// + '<br/>';
+      var textResult = ' '.repeat(rowLength - sum.toString().length - i) + convertDigitsToLetter(sum, letterToDigit);
       var subArray = textResult.split('');
       letterMatrix.push(subArray);
     }
@@ -134,12 +136,17 @@ function generateExpression() {
 
     letterMatrix.push(textResult.split(''))
 
+    // Dobavqne na znaka '+' za vizualizaciq
     letterMatrix[Math.ceil(secondMassive.length / 2)][0] = '+';
 
     const table = document.querySelector('table');
 
-    letterMatrix.forEach(x => {
+    // Izgrajdane na tablicata sprqmo dannite ot matricata
+    letterMatrix.forEach((x, index) => {
       const row = document.createElement('tr');
+      // Dobavqne na podchertavanitq pod parviq i predi posledniq red
+      if(index == 0 || index == secondMassive.length) row.classList.add("border-between-rows");
+
       x.forEach(letter => {
         const cell = document.createElement('td');
         cell.textContent = letter;
@@ -147,10 +154,6 @@ function generateExpression() {
       });
       table.appendChild(row);
     });
-
-    var rows = table.getElementsByTagName('tr');
-    rows[0].classList.add('underline-row');
-    //rows[4].classList.add('underline-column');
 }
 
 function convertDigitsToLetter(number, letterToDigit) {
