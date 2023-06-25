@@ -249,6 +249,21 @@ function setTableLetterWithDigits(){
     }
 }
 
+function showList(){
+  // Получаване на референция към текстовото поле с клас "fixed-bottom"
+  const textArea = document.querySelector('.fixed-bottom'); 
+
+  // Прочитане на информацията от обекта и отпечатване на един ред
+  let output = '';
+  for (const key in letterToDigit) {
+    output += `${key}:${letterToDigit[key]} `;
+  }
+
+  // Записване на резултата в текстовото поле
+  //textArea.textContent = output;
+  textArea.value += '\n' + output;
+}
+
 setParameters();
 generateExpression();
 setTableLetterWithDigits();

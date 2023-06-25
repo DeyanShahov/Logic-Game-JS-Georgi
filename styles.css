@@ -36,7 +36,7 @@
   
 td {
     padding: 10px;
-    border: 1px solid white;
+    border: none;
 }
 
 /* Промяна на границата между първия и втория ред */
@@ -68,6 +68,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 3;
 }
 
 #scale-slider {
@@ -119,4 +120,14 @@ body {
     justify-content: center; /* Хоризонтално центриране */
     align-items: center; /* Вертикално центриране */
     height: 100vh; /* Задаване на височина на колоната (например 100vh за цял екран) */
+    z-index: 2;
+}
+
+.fixed-bottom {
+    background-color: darkgrey;
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    z-index: 1;
 }
