@@ -207,22 +207,31 @@ function setTableLetterWithDigits(){
   for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
       var row = document.createElement('tr');
 
-      for (var j = 0; j <= 10; j++) {
+      for (var j = 1; j <= 11; j++) {
         var digitCell = document.createElement('td');
         var digitSpan = document.createElement('span');
-
-        if(j == 0){
-         digitSpan.textContent = '-';
-         digitCell.appendChild(digitSpan);
-         row.appendChild(digitCell);
-        }
-        else{
-         digitSpan.textContent = j - 1;
-         digitSpan.classList.add('digit');
-         digitSpan.setAttribute('data-digit', j - 1);
-         digitCell.appendChild(digitSpan);
-         row.appendChild(digitCell);
-        };        
+ 
+        switch(j){
+          case 1:
+             digitSpan.textContent = '-';
+             digitCell.appendChild(digitSpan);
+             row.appendChild(digitCell);
+            break;
+          case 11:
+             digitSpan.textContent = 0;
+             digitSpan.classList.add('digit');
+             digitSpan.setAttribute('data-digit', 0);
+             digitCell.appendChild(digitSpan);
+             row.appendChild(digitCell);
+            break;
+          default:
+             digitSpan.textContent = j - 1;
+             digitSpan.classList.add('digit');
+             digitSpan.setAttribute('data-digit', j - 1);
+             digitCell.appendChild(digitSpan);
+             row.appendChild(digitCell);
+            break;
+        }      
       }
 
       row.addEventListener('mousedown', toggleMark);
