@@ -113,3 +113,10 @@ body {
     background-color: red;
     color: white;
 }
+
+.col {
+    display: flex;
+    justify-content: center; /* Хоризонтално центриране */
+    align-items: center; /* Вертикално центриране */
+    height: 100vh; /* Задаване на височина на колоната (например 100vh за цял екран) */
+}

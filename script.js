@@ -176,11 +176,13 @@ function convertDigitsToLetter(number, letterToDigit) {
 
 function setTableLetterWithDigits(){
   var scaleSlider = document.getElementById('scale-slider');
-  var tableContainer = document.getElementById('table-container');
+  var tableContainer1 = document.getElementById('table-container');
+  var tableContainer2 = document.getElementById('table-task');
 
   function changeScale() {
     var scale = scaleSlider.value;
-    tableContainer.style.transform = 'scale(' + scale + ')';      
+    tableContainer1.style.transform = 'scale(' + scale + ')';      
+    tableContainer2.style.transform = 'scale(' + scale + ')';      
   }
 
   scaleSlider.addEventListener('input', changeScale);
