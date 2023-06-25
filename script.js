@@ -256,11 +256,10 @@ function showList(){
   // Прочитане на информацията от обекта и отпечатване на един ред
   let output = '';
   for (const key in letterToDigit) {
-    output += `${key}:${letterToDigit[key]} `;
+    output += ` ${letterToDigit[key]} - ${key} /`;
   }
 
   // Записване на резултата в текстовото поле
-  //textArea.textContent = output;
   textArea.value += '\n' + output;
 }
 
