@@ -7,12 +7,77 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="output"></div>
+ 
 
-    <table>
-      
-    </table>
+  <div class="table-container">
+
+    <table id="table-task"> </table>
+    
+    <div id="container">
+      <div id="slider-container">
+        <input type="range" id="scale-slider" min="0.5" max="2" step="0.1" value="1" />
+      </div>
+      <div id="table-container">
+        <table>
+          <tbody id="letters-container"></tbody>
+        </table>    
+      </div>
+    </div>
+    
+  </div>
+
+
+  <script>
+    var scaleSlider = document.getElementById('scale-slider');
+    var tableContainer = document.getElementById('table-container');
+
+    function changeScale() {
+      var scale = scaleSlider.value;
+      tableContainer.style.transform = 'scale(' + scale + ')';      
+    }
+
+    scaleSlider.addEventListener('input', changeScale);
+
+    function toggleMark(event) {
+      var cell = event.target;
+
+      if (cell.tagName === 'SPAN' && cell.classList.contains('digit')) {
+        cell.classList.toggle('marked');
+      }
+    }
+
+    var lettersContainer = document.getElementById('letters-container');
+    var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    for (var i = 0; i < 10; i++) {
+      var row = document.createElement('tr');
+
+      for (var j = 0; j < 10; j++) {
+        var digitCell = document.createElement('td');
+        var digitSpan = document.createElement('span');
+        digitSpan.textContent = j;
+        digitSpan.classList.add('digit');
+        digitSpan.setAttribute('data-digit', j);
+        digitCell.appendChild(digitSpan);
+        row.appendChild(digitCell);
+      }
+
+      row.addEventListener('mousedown', toggleMark);
+      lettersContainer.appendChild(row);
+    }
+
+    var rows = lettersContainer.getElementsByTagName('tr');
+    var letters = alphabet.split('');
+
+    for (var i = 0; i < letters.length; i++) {
+      var letter = letters[i];
+      var cell = document.createElement('td');
+      cell.textContent = letter;
+
+      rows[i].insertBefore(cell, rows[i].firstChild);
+    }
+  </script>
            
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
