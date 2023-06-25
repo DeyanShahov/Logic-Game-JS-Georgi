@@ -1,5 +1,7 @@
 var firstParameter, secondParameter, result;
 var secondMassive = [];
+var letterToDigit = {};
+var usedLetters = '';
 
 
 function setParameters(inputNumber){
@@ -101,17 +103,22 @@ function setParameters(inputNumber){
 
 function generateExpression() {
 
+    // Sazdavane na spisak s latinskite bukvi, razbarkvane i vzemane na pavite 10
     var letters = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i))
       .sort(() => Math.random() - 0.5)
       .slice(0, 10);
-  
-    var letterToDigit = {};
+
+    //Dobavqne na bukvite kam slojen obekt s otnoshenieto im bukvi kam cifri
     letters.forEach((letter, index) => {
       letterToDigit[index] = letter;
     });
   
     var firstExpression = convertDigitsToLetter(firstParameter, letterToDigit);
     var secondExpression = convertDigitsToLetter(secondParameter, letterToDigit);
+
+    //Dobavqne na bukvenite stoinosti kam izpolzvanite bukvi
+    usedLetters += firstExpression;
+    usedLetters += secondExpression;
     
     var expression = firstExpression + ' * ' + secondExpression;
 
@@ -126,15 +133,18 @@ function generateExpression() {
   
     for (var i = 0; i < secondMassive.length; i++) {
       var sum = firstParameter * secondMassive[i];
-      var textResult = ' '.repeat(rowLength - sum.toString().length - i) + convertDigitsToLetter(sum, letterToDigit);
+      var sumToString = convertDigitsToLetter(sum, letterToDigit)
+      var textResult = ' '.repeat(rowLength - sum.toString().length - i) + sumToString;
+      usedLetters += sumToString;
       var subArray = textResult.split('');
       letterMatrix.push(subArray);
     }
   
+    var textResult = convertDigitsToLetter(result, letterToDigit);
+    usedLetters += textResult;
+    var textResultToPrint = ' '.repeat(rowLength - result.toString().length) + textResult;
 
-    var textResult = ' '.repeat(rowLength - result.toString().length) + convertDigitsToLetter(result, letterToDigit);
-
-    letterMatrix.push(textResult.split(''))
+    letterMatrix.push(textResultToPrint.split(''))
 
     // Dobavqne na znaka '+' za vizualizaciq
     letterMatrix[Math.ceil(secondMassive.length / 2)][0] = '+';
@@ -164,5 +174,70 @@ function convertDigitsToLetter(number, letterToDigit) {
     return toPrint;
 }
 
+function setTableLetterWithDigits(){
+  var scaleSlider = document.getElementById('scale-slider');
+  var tableContainer = document.getElementById('table-container');
+
+  function changeScale() {
+    var scale = scaleSlider.value;
+    tableContainer.style.transform = 'scale(' + scale + ')';      
+  }
+
+  scaleSlider.addEventListener('input', changeScale);
+
+  function toggleMark(event) {
+    var cell = event.target;
+
+    if (cell.tagName === 'SPAN' && cell.classList.contains('digit')) {
+      cell.classList.toggle('marked');
+    }
+  }
+
+  var lettersContainer = document.getElementById('letters-container');
+
+  var uniqueUsedLettersArray = usedLetters
+      .split('')
+      .filter(function(item, index, arr) {
+         return arr.indexOf(item) === index; // Филтриране на уникалните символи
+      })
+      .join(""); // Обединяване на уникалните символи в низ
+
+  for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
+      var row = document.createElement('tr');
+
+      for (var j = 0; j <= 10; j++) {
+        var digitCell = document.createElement('td');
+        var digitSpan = document.createElement('span');
+
+        if(j == 0){
+         digitSpan.textContent = '-';
+         digitCell.appendChild(digitSpan);
+         row.appendChild(digitCell);
+        }
+        else{
+         digitSpan.textContent = j - 1;
+         digitSpan.classList.add('digit');
+         digitSpan.setAttribute('data-digit', j - 1);
+         digitCell.appendChild(digitSpan);
+         row.appendChild(digitCell);
+        };        
+      }
+
+      row.addEventListener('mousedown', toggleMark);
+      lettersContainer.appendChild(row);
+    }
+
+    var rows = lettersContainer.getElementsByTagName('tr');
+
+    for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
+      var letter = uniqueUsedLettersArray[i];
+      var cell = document.createElement('td');
+      cell.textContent = letter;
+
+      rows[i].insertBefore(cell, rows[i].firstChild);
+    }
+}
+
 setParameters();
 generateExpression();
+setTableLetterWithDigits();
