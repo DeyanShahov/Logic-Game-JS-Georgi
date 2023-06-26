@@ -1,26 +1,3 @@
-/* .container {
-    display: inline-block;
-    border-bottom: 2px solid black;
-    padding-bottom: 5px;
-}
-  
-.letters {
-    display: inline-block;
-    font-size: 24px;
-    font-weight: bold;
-} */
-
-/* .underline {
-    text-decoration: underline;
-}
-
-.underline-row td {
-    text-decoration: underline;
-}
-
-.underline-column {
-    border-top: 1px solid black;
-} */
 
 .table-container {
     display: flex;
@@ -81,6 +58,14 @@ body {
     overflow: auto;
 }
 
+
+#table2-task {
+    table-layout: fixed;
+    width: 100%;
+}
+  
+
+
 /* table {
     border-collapse: collapse;
     border: 1px solid black;
@@ -134,9 +119,9 @@ body {
 
 
 
-/* .fields {
+.fields {
     display: flex;
-} */
+}
   
 .fields input {
     border: none;

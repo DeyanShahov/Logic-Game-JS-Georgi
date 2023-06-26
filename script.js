@@ -7,6 +7,7 @@ var usedLetters = '';
 function setParameters(inputNumber){
     var isValidNumber = false;
 
+    // Въвеждане и валидиране на входните данни за първия параметър
     while(!isValidNumber){
         var input = prompt("Въведете първия множител до колко цифрен да е. Възможният избор е в интервала от 1 до 9:");
         var inputNumber = parseInt(input);
@@ -53,6 +54,7 @@ function setParameters(inputNumber){
 
     var isValidNumber = false;
 
+     // Въвеждане и валидиране на входните данни за първия параметър
     while (!isValidNumber) {
         var input = prompt("Въведете втория множител до колко цифрен да е. Възможният избор е в интервала от 1 до 9:");
         inputNumber = parseInt(input);
@@ -97,18 +99,21 @@ function setParameters(inputNumber){
           break;
     }
     
+    // Изчисляване на резултата от умножението
     result = firstParameter * secondParameter;
+
+    // Преобразуване на втория множител в текстов масив от данни
     secondMassive = secondParameter.toString().split('').reverse().map(Number);
 }
 
 function generateExpression() {
 
-    // Sazdavane na spisak s latinskite bukvi, razbarkvane i vzemane na pavite 10
+    // Създаване на списък с латинските букви, разбъркване и вземане на парвите 10
     var letters = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i))
       .sort(() => Math.random() - 0.5)
       .slice(0, 10);
 
-    //Dobavqne na bukvite kam slojen obekt s otnoshenieto im bukvi kam cifri
+    // Добавяне на буквите към сложен обек с отношението им букви към цифри
     letters.forEach((letter, index) => {
       letterToDigit[index] = letter;
     });
@@ -116,21 +121,22 @@ function generateExpression() {
     var firstExpression = convertDigitsToLetter(firstParameter, letterToDigit);
     var secondExpression = convertDigitsToLetter(secondParameter, letterToDigit);
 
-    //Dobavqne na bukvenite stoinosti kam izpolzvanite bukvi
+    // Добавяне на буквените стоиности към използваните букви
     usedLetters += firstExpression;
     usedLetters += secondExpression;
     
     var expression = firstExpression + ' * ' + secondExpression;
 
-    // Prazen array za badeshtata tablica
+    // Празен арай за бъдещата таблица
     var letterMatrix = []; 
 
-    //Adva parviq sub array sadarjasht parviq red s umnojenieto na dvete chisla
+    // Добавяне към таблицата на суб арай с буквите за умножението на двата множителя
     letterMatrix.push(expression.split('')); 
 
-  
+    // Дължина на израза за умножението на множителите
     var rowLength = expression.length;
   
+    // Попълване на таблицата с буквите за отпечатване с резултатите от умножаването
     for (var i = 0; i < secondMassive.length; i++) {
       var sum = firstParameter * secondMassive[i];
       var sumToString = convertDigitsToLetter(sum, letterToDigit)
@@ -140,21 +146,25 @@ function generateExpression() {
       letterMatrix.push(subArray);
     }
   
+    // Преобразуване на резултата от умножението в букви
     var textResult = convertDigitsToLetter(result, letterToDigit);
+    // Добавяне на резултата кам списъка с изпоплзваните букви
     usedLetters += textResult;
-    var textResultToPrint = ' '.repeat(rowLength - result.toString().length) + textResult;
+    // Изчисляване на дължината на краиния резултат и преобразужането му в маасив
+    var textResultToPrint = (' '.repeat(rowLength - result.toString().length) + textResult).split('');
 
-    letterMatrix.push(textResultToPrint.split(''))
+    // Добавяне към таблицата на суб арай с буквите за резултата от умножението на двата множителя
+    letterMatrix.push(textResultToPrint)
 
-    // Dobavqne na znaka '+' za vizualizaciq
+    // Добавяне на знака '+' в масива от данни, за по добра визуализация на действията
     letterMatrix[Math.ceil(secondMassive.length / 2)][0] = '+';
 
     const table = document.querySelector('table');
 
-    // Izgrajdane na tablicata sprqmo dannite ot matricata
+    // Изграждане на таблица спрямо данните от матрицата с букви ("letterMatrix")
     letterMatrix.forEach((x, index) => {
       const row = document.createElement('tr');
-      // Dobavqne na podchertavanitq pod parviq i predi posledniq red
+      // Добавяне на подчертавания под парвия и преди последния ред в таблицата
       if(index == 0 || index == secondMassive.length) row.classList.add("border-between-rows");
 
       x.forEach(letter => {
@@ -276,7 +286,7 @@ function SetFieldForSolution(letterMatrix) {
 
   letterMatrix.forEach((x, index) => {
     const row = document.createElement('tr');
-    if (index == 0 || index == letterMatrix.length - 1) {
+    if (index == 0 || index == letterMatrix.length - 2) {
       row.classList.add("border-between-rows");
     }
 
@@ -315,78 +325,6 @@ function createInputField(cell) {
 
   cell.appendChild(input);
 }
-
-
-
-// const inputs = document.querySelectorAll('.fields input');
-
-// inputs.forEach((input) => {
-//   input.addEventListener('input', () => {
-//     const inputValue = Number(input.value);
-//     const isValidNumber = !isNaN(inputValue) && inputValue >= 0 && inputValue <= 9;
-
-//     if (!isValidNumber) {
-//       input.value = '';
-//     } else if (input.value.length > 1) {
-//       input.value = input.value.slice(0, 1);
-//     }
-//   });
-// });
-
-
-// function SetFieldForSolution(letterMatrix){
-//   var table = document.getElementById('table2-task');
-//   //const table = document.querySelector('.fields');
-
-//   // Izgrajdane na tablicata sprqmo dannite ot matricata
-//   letterMatrix.forEach((x, index) => {
-//     const row = document.createElement('tr');
-//     // Dobavqne na podchertavanitq pod parviq i predi posledniq red
-//     if(index == 0 || index == secondMassive.length) row.classList.add("border-between-rows");
-
-//     x.forEach(letter => {
-//       const cell = document.createElement('td');
-
-//       //cell.textContent = /[a-zA-Z]/.test(letter);
-//       if(/[a-zA-Z]/.test(letter)){
-//         cell.textContent = createInputField(cell)
-//       }
-//       else{
-//         cell.textContent = letter;
-//       }
-//       row.appendChild(cell);
-//     });
-//     table.appendChild(row);
-//   });
-// }
-
-//const fieldsContainer = document.querySelector('.fields');
-// const addButton = document.querySelector('#addInput');
-
-// addButton.addEventListener('click', () => {
-//   createInputField();
-// });
-
-// function createInputField(cell) {
-//   //const fieldsContainer = document.querySelector('.fields');
-//   const input = document.createElement('input');
-//   input.type = 'text';
-//   input.maxLength = 1;
-
-//   input.addEventListener('input', () => {
-//     const inputValue = Number(input.value);
-//     const isValidNumber = !isNaN(inputValue) && inputValue >= 0 && inputValue <= 9;
-
-//     if (!isValidNumber) {
-//       input.value = '';
-//     } else if (input.value.length > 1) {
-//       input.value = input.value.slice(0, 1);
-//     }
-//   });
-
-//   cell.appendChild(input);
-// }
-
 
 
 setParameters();
