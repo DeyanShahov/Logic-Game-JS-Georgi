@@ -164,6 +164,8 @@ function generateExpression() {
       });
       table.appendChild(row);
     });
+
+    SetFieldForSolution(letterMatrix);
 }
 
 function convertDigitsToLetter(number, letterToDigit) {
@@ -178,14 +180,19 @@ function setTableLetterWithDigits(){
   var scaleSlider = document.getElementById('scale-slider');
   var tableContainer1 = document.getElementById('table-container');
   var tableContainer2 = document.getElementById('table-task');
+  var table2 = document.getElementById('table2-task');
 
   function changeScale() {
     var scale = scaleSlider.value;
     tableContainer1.style.transform = 'scale(' + scale + ')';      
-    tableContainer2.style.transform = 'scale(' + scale + ')';      
+    tableContainer2.style.transform = 'scale(' + scale + ')';  
+
+    const opacityValue = this.value;
+    table2.style.opacity = scaleSlider["max"] - opacityValue;    
   }
 
   scaleSlider.addEventListener('input', changeScale);
+
 
   function toggleMark(event) {
     var cell = event.target;
@@ -238,15 +245,15 @@ function setTableLetterWithDigits(){
       lettersContainer.appendChild(row);
     }
 
-    var rows = lettersContainer.getElementsByTagName('tr');
+  var rows = lettersContainer.getElementsByTagName('tr');
 
-    for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
-      var letter = uniqueUsedLettersArray[i];
-      var cell = document.createElement('td');
-      cell.textContent = letter;
+  for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
+    var letter = uniqueUsedLettersArray[i];
+    var cell = document.createElement('td');
+    cell.textContent = letter;
 
-      rows[i].insertBefore(cell, rows[i].firstChild);
-    }
+    rows[i].insertBefore(cell, rows[i].firstChild);
+  }
 }
 
 function showList(){
@@ -262,6 +269,125 @@ function showList(){
   // Записване на резултата в текстовото поле
   textArea.value += '\n' + output;
 }
+
+
+function SetFieldForSolution(letterMatrix) {
+  var table = document.getElementById('table2-task');
+
+  letterMatrix.forEach((x, index) => {
+    const row = document.createElement('tr');
+    if (index == 0 || index == letterMatrix.length - 1) {
+      row.classList.add("border-between-rows");
+    }
+
+    x.forEach(letter => {
+      const cell = document.createElement('td');
+
+      if (/[a-zA-Z]/.test(letter)) {
+        cell.textContent = '';
+        createInputField(cell);
+      } else {
+        cell.textContent = letter;
+      }
+      
+      row.appendChild(cell);
+    });
+
+    table.appendChild(row);
+  });
+}
+
+function createInputField(cell) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.maxLength = 1;
+
+  input.addEventListener('input', () => {
+    const inputValue = Number(input.value);
+    const isValidNumber = !isNaN(inputValue) && inputValue >= 0 && inputValue <= 9;
+
+    if (!isValidNumber) {
+      input.value = '';
+    } else if (input.value.length > 1) {
+      input.value = input.value.slice(0, 1);
+    }
+  });
+
+  cell.appendChild(input);
+}
+
+
+
+// const inputs = document.querySelectorAll('.fields input');
+
+// inputs.forEach((input) => {
+//   input.addEventListener('input', () => {
+//     const inputValue = Number(input.value);
+//     const isValidNumber = !isNaN(inputValue) && inputValue >= 0 && inputValue <= 9;
+
+//     if (!isValidNumber) {
+//       input.value = '';
+//     } else if (input.value.length > 1) {
+//       input.value = input.value.slice(0, 1);
+//     }
+//   });
+// });
+
+
+// function SetFieldForSolution(letterMatrix){
+//   var table = document.getElementById('table2-task');
+//   //const table = document.querySelector('.fields');
+
+//   // Izgrajdane na tablicata sprqmo dannite ot matricata
+//   letterMatrix.forEach((x, index) => {
+//     const row = document.createElement('tr');
+//     // Dobavqne na podchertavanitq pod parviq i predi posledniq red
+//     if(index == 0 || index == secondMassive.length) row.classList.add("border-between-rows");
+
+//     x.forEach(letter => {
+//       const cell = document.createElement('td');
+
+//       //cell.textContent = /[a-zA-Z]/.test(letter);
+//       if(/[a-zA-Z]/.test(letter)){
+//         cell.textContent = createInputField(cell)
+//       }
+//       else{
+//         cell.textContent = letter;
+//       }
+//       row.appendChild(cell);
+//     });
+//     table.appendChild(row);
+//   });
+// }
+
+//const fieldsContainer = document.querySelector('.fields');
+// const addButton = document.querySelector('#addInput');
+
+// addButton.addEventListener('click', () => {
+//   createInputField();
+// });
+
+// function createInputField(cell) {
+//   //const fieldsContainer = document.querySelector('.fields');
+//   const input = document.createElement('input');
+//   input.type = 'text';
+//   input.maxLength = 1;
+
+//   input.addEventListener('input', () => {
+//     const inputValue = Number(input.value);
+//     const isValidNumber = !isNaN(inputValue) && inputValue >= 0 && inputValue <= 9;
+
+//     if (!isValidNumber) {
+//       input.value = '';
+//     } else if (input.value.length > 1) {
+//       input.value = input.value.slice(0, 1);
+//     }
+//   });
+
+//   cell.appendChild(input);
+// }
+
+
 
 setParameters();
 generateExpression();

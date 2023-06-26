@@ -131,3 +131,23 @@ body {
     right: 0;
     z-index: 1;
 }
+
+
+
+/* .fields {
+    display: flex;
+} */
+  
+.fields input {
+    border: none;
+    border-bottom: 2px solid black;
+    width: 30px;
+    text-align: center;
+    margin-right: 10px;
+    font-size: 20px;
+}
+  
+.fields input:focus {
+    outline: none;
+    border-bottom: 2px solid red;
+}
