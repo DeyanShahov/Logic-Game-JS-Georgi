@@ -328,11 +328,17 @@ function deleteTable() {
   var tbody = document.getElementById('letters-container');
   while (tbody.firstChild) {
     tbody.removeChild(tbody.firstChild); // Изтриване на първия ред от tbody
+    //tbody.firstChild.remove();
   }
+  //tbody.innerHTML = "";
 }
 
 
 function reloadGame(){
+  usedLetters = "";
+  letterToDigit = {};
+  secondMassive = [];
+  
   inputParameters();
   deleteTable();
   generateExpression();
