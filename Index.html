@@ -7,7 +7,17 @@
     <title>Логическа игра</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>  
+<body> 
+  <nav class="navbar navbar-light bg-light">
+    <form class="form-inline">
+      <button class="btn btn-outline-success" type="button" onclick="reloadGame()">Нова задача</button>
+      <button class="btn btn-sm btn-outline-secondary" type="button" onclick="showList()" data-toggle="tooltip" data-placement="bottom" title="showList">Списък</button>
+      <button class="btn btn-sm btn-outline-secondary" type="button">Решение</button>
+      <button class="btn btn-sm btn-outline-secondary" type="button">Запамети</button>
+      <button class="btn btn-sm btn-outline-secondary" type="button">Зареди</button>
+    </form>
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: auto;" onclick="executeCommand()">Стартираи кода от текст полето</button>
+  </nav> 
 
   <div id="slider-container">
     <input type="range" id="scale-slider" min="0.5" max="2" step="0.1" value="1" />
@@ -20,14 +30,13 @@
       <div class="col">
         <div class="fields">
           <table id="table2-task"> </table>
-          <!-- <button id="addInput">Добави поле</button> -->
         </div>            
       </div>
       <div class="col">      
         <div class="table-container"> 
           <div id="container">            
             <div id="table-container">
-              <table>
+              <table id="table3-task">
                 <tbody id="letters-container"></tbody>
               </table>    
             </div>
@@ -35,12 +44,17 @@
         </div>
       </div>        
     </div>  
-    <button onclick="showList()">Списък</button> 
   </div>
 
+  <!-- <div id="textPole" style="position: relative;">
+    <textarea class="fixed" id="" cols="250"  rows="10"></textarea>
+    <button class="myButton">Button</button>
+  </div> -->
 
-  <div class="form-group">
-    <textarea class="fixed-bottom" id="exampleFormControlTextarea1" rows="10" placeholder="Може да се пише тука!"></textarea>
+  <div class="form-group" style="position: relative;">
+    <textarea class="fixed-bottom" id="Textarea" rows="10" placeholder="Може да се пише тука! За изпълнение на команди точния текст трябва да е маркиран!
+Да се преправи Z индекса на обектите и ще се оправи кликането навсякъде в текст ареа полето. Има бъг при сметка на 9 цифрено с 9 цифрено число.
+Списакът с букви към цифри показва винаги по 10 неща, а не само използваните."></textarea>   
   </div>
            
   <script src="script.js"></script>

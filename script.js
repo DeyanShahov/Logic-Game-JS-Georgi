@@ -3,107 +3,72 @@ var secondMassive = [];
 var letterToDigit = {};
 var usedLetters = '';
 
+function inputParameters(inputNumber){
 
-function setParameters(inputNumber){
-    var isValidNumber = false;
+  if (isNaN(firstParameter)){
+     // Въвеждане и валидиране на входните данни за параметрите
+     while(isNaN(firstParameter) || isNaN(secondParameter)){
+      var input = prompt("Въведете множителя до колко цифрен да е. Възможният избор е в интервала от 1 до 6:");
+      var inputNumber = parseInt(input);
 
-    // Въвеждане и валидиране на входните данни за първия параметър
-    while(!isValidNumber){
-        var input = prompt("Въведете първия множител до колко цифрен да е. Възможният избор е в интервала от 1 до 9:");
-        var inputNumber = parseInt(input);
+      if (isNaN(inputNumber) || inputNumber < 1 || inputNumber > 6) {
+        alert("Невалидно! Моля, въведете число от 1 до 6.");
+      } else {
+        setParameters(inputNumber);
+      }};
+  } else {
+    setParameters(firstParameter.toString().length);
+    setParameters(secondParameter.toString().length);
+  }
+ 
 
-        if (isNaN(inputNumber) || inputNumber < 1 || inputNumber > 9) {
-            alert("Невалидно! Моля, въведете число от 1 до 9.");
-          } else {
-            isValidNumber = true;
-          }
-    }
+  // Изчисляване на резултата от умножението
+  result = firstParameter * secondParameter;
 
-    switch (inputNumber) {
+  // Преобразуване на втория множител в текстов масив от данни
+  secondMassive = secondParameter.toString().split('').reverse().map(Number);
+}
+
+
+function setParameters(number){
+    
+  var parameter;
+
+    switch (number) {
         case 1:
-          firstParameter = Math.floor(Math.random() * 9) + 1;
+          parameter = Math.floor(Math.random() * 9) + 1;
           break;
         case 2:
-          firstParameter = Math.floor(Math.random() * 90) + 10;
+          parameter = Math.floor(Math.random() * 90) + 10;
           break;
         case 3:
-          firstParameter = Math.floor(Math.random() * 900) + 100;
+          parameter = Math.floor(Math.random() * 900) + 100;
           break;
         case 4:
-          firstParameter = Math.floor(Math.random() * 9000) + 1000;
+          parameter = Math.floor(Math.random() * 9000) + 1000;
           break;
         case 5:
-          firstParameter = Math.floor(Math.random() * 90000) + 10000;
+          parameter = Math.floor(Math.random() * 90000) + 10000;
           break;
         case 6:
-          firstParameter = Math.floor(Math.random() * 900000) + 100000;
+          parameter = Math.floor(Math.random() * 900000) + 100000;
           break;
         case 7:
           firstParameter = Math.floor(Math.random() * 9000000) + 1000000;
           break;
         case 8:
-          firstParameter = Math.floor(Math.random() * 90000000) + 10000000;
+          parameter = Math.floor(Math.random() * 90000000) + 10000000;
           break;
         case 9:
-          firstParameter = Math.floor(Math.random() * 900000000) + 100000000;
+          parameter = Math.floor(Math.random() * 900000000) + 100000000;
           break;
         default:
-          firstParameter = Math.floor(Math.random() * 999999999) + 1;
+          parameter = Math.floor(Math.random() * 999999999) + 1;
           break;
     }
 
-    var isValidNumber = false;
-
-     // Въвеждане и валидиране на входните данни за първия параметър
-    while (!isValidNumber) {
-        var input = prompt("Въведете втория множител до колко цифрен да е. Възможният избор е в интервала от 1 до 9:");
-        inputNumber = parseInt(input);
-    
-        if (isNaN(inputNumber) || inputNumber < 1 || inputNumber > 9) {
-          alert("Невалидно! Моля, въведете число от 1 до 9.");
-        } else {
-          isValidNumber = true;
-        }
-    }
-
-    switch (inputNumber) {
-        case 1:
-          secondParameter = Math.floor(Math.random() * 9) + 1;
-          break;
-        case 2:
-          secondParameter = Math.floor(Math.random() * 90) + 10;
-          break;
-        case 3:
-          secondParameter = Math.floor(Math.random() * 900) + 100;
-          break;
-        case 4:
-          secondParameter = Math.floor(Math.random() * 9000) + 1000;
-          break;
-        case 5:
-          secondParameter = Math.floor(Math.random() * 90000) + 10000;
-          break;
-        case 6:
-          secondParameter = Math.floor(Math.random() * 900000) + 100000;
-          break;
-        case 7:
-          secondParameter = Math.floor(Math.random() * 9000000) + 1000000;
-          break;
-        case 8:
-          secondParameter = Math.floor(Math.random() * 90000000) + 10000000;
-          break;
-        case 9:
-          secondParameter = Math.floor(Math.random() * 900000000) + 100000000;
-          break;
-        default:
-          secondParameter = Math.floor(Math.random() * 999999999) + 1;
-          break;
-    }
-    
-    // Изчисляване на резултата от умножението
-    result = firstParameter * secondParameter;
-
-    // Преобразуване на втория множител в текстов масив от данни
-    secondMassive = secondParameter.toString().split('').reverse().map(Number);
+    // Задаване конкретните стойности на двата основни праметри, след като вече са били преобразувани в реялни числа
+    isNaN(firstParameter) ? firstParameter = parameter : secondParameter = parameter;
 }
 
 function generateExpression() {
@@ -175,7 +140,7 @@ function generateExpression() {
       table.appendChild(row);
     });
 
-    SetFieldForSolution(letterMatrix);
+    setFieldForSolution(letterMatrix);
 }
 
 function convertDigitsToLetter(number, letterToDigit) {
@@ -281,7 +246,7 @@ function showList(){
 }
 
 
-function SetFieldForSolution(letterMatrix) {
+function setFieldForSolution(letterMatrix) {
   var table = document.getElementById('table2-task');
 
   letterMatrix.forEach((x, index) => {
@@ -327,6 +292,54 @@ function createInputField(cell) {
 }
 
 
-setParameters();
+function executeCommand() {
+  const textarea = document.getElementById('Textarea');
+  const command = getSelectedText(textarea);
+
+  switch(command){
+    case "showList":
+      showList();
+      break;
+    default:
+      console.log('Невалидна команда');
+      break;
+  }
+}
+
+function getSelectedText(element) {
+  const start = element.selectionStart;
+  const end = element.selectionEnd;
+  return element.value.substring(start, end).trim();
+}
+
+function deleteTable() {
+  var table = document.getElementById('table-task'); // Идентификация на таблицата, която искате да изтриете
+
+  while (table.firstChild) {
+    table.firstChild.remove(); // Изтриване на първия дете елемент (ред) докато има такива
+  }
+
+  var table2 = document.getElementById('table2-task'); // Идентификация на таблицата, която искате да изтриете
+
+  while (table2.firstChild) {
+    table2.firstChild.remove(); // Изтриване на първия дете елемент (ред) докато има такива
+  }
+
+  var tbody = document.getElementById('letters-container');
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild); // Изтриване на първия ред от tbody
+  }
+}
+
+
+function reloadGame(){
+  inputParameters();
+  deleteTable();
+  generateExpression();
+  setTableLetterWithDigits();
+}
+
+inputParameters();
+//setParameters();
 generateExpression();
 setTableLetterWithDigits();

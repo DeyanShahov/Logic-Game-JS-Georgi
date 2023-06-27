@@ -4,7 +4,7 @@
 }
   
 .table-container table {
-    margin-right: 50px; /* Разстояние между таблиците */
+    margin-right: 150px; /* Разстояние между таблиците */
 }
 
 #table-task {
@@ -108,16 +108,14 @@ body {
     z-index: 2;
 }
 
-.fixed-bottom {
+.fixed-bottom {  
     background-color: darkgrey;
     position: fixed;
-    bottom: 50px;
+    bottom: 5px;
     left: 0;
     right: 0;
     z-index: 1;
 }
-
-
 
 .fields {
     display: flex;
@@ -135,4 +133,20 @@ body {
 .fields input:focus {
     outline: none;
     border-bottom: 2px solid red;
+}
+
+/* textarea {
+    border: 1px solid #eee;
+} */
+
+.myButton {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 1;
+}
+
+
+#textPole{
+    background-color: rgb(24, 15, 13);
 }
