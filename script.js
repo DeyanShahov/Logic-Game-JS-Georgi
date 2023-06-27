@@ -3,22 +3,30 @@ var secondMassive = [];
 var letterToDigit = {};
 var usedLetters = '';
 
-function inputParameters(inputNumber){
+function inputAndSetParameters(inputNumber){
 
-  if (isNaN(firstParameter)){
+  // Проверка дали играта е ново стартирана или след рестарт
+  if (isNaN(result)){
      // Въвеждане и валидиране на входните данни за параметрите
      while(isNaN(firstParameter) || isNaN(secondParameter)){
       var input = prompt("Въведете множителя до колко цифрен да е. Възможният избор е в интервала от 1 до 6:");
       var inputNumber = parseInt(input);
 
+      // Валидация и записване на входните данни
       if (isNaN(inputNumber) || inputNumber < 1 || inputNumber > 6) {
         alert("Невалидно! Моля, въведете число от 1 до 6.");
       } else {
         setParameters(inputNumber);
       }};
+
   } else {
-    setParameters(firstParameter.toString().length);
-    setParameters(secondParameter.toString().length);
+    // Рестартирване на играта, като вземам дължината на текущите параметрите и директно преизчислявам наново
+    var lengthFirstParameter = firstParameter.toString().length;
+    var lengthSecondParameter = secondParameter.toString().length;
+    firstParameter = NaN ;
+    secondParameter = NaN;
+    setParameters(lengthFirstParameter);
+    setParameters(lengthSecondParameter);
   }
  
 
@@ -67,7 +75,7 @@ function setParameters(number){
           break;
     }
 
-    // Задаване конкретните стойности на двата основни праметри, след като вече са били преобразувани в реялни числа
+    // Задаване конкретните стойности на двата основни параметъра, след като вече са били преобразувани в реялни числа
     isNaN(firstParameter) ? firstParameter = parameter : secondParameter = parameter;
 }
 
@@ -179,12 +187,7 @@ function setTableLetterWithDigits(){
 
   var lettersContainer = document.getElementById('letters-container');
 
-  var uniqueUsedLettersArray = usedLetters
-      .split('')
-      .filter(function(item, index, arr) {
-         return arr.indexOf(item) === index; // Филтриране на уникалните символи
-      })
-      .join(""); // Обединяване на уникалните символи в низ
+  var uniqueUsedLettersArray = filterUniqueLetters(); // Обединяване на уникалните символи в низ
 
   for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
       var row = document.createElement('tr');
@@ -231,6 +234,15 @@ function setTableLetterWithDigits(){
   }
 }
 
+function filterUniqueLetters() {
+  return usedLetters
+    .split('')
+    .filter(function (item, index, arr) {
+      return arr.indexOf(item) === index; // Филтриране на уникалните символи
+    })
+    .join("");
+}
+
 function showList(){
   // Получаване на референция към текстовото поле с клас "fixed-bottom"
   const textArea = document.querySelector('.fixed-bottom'); 
@@ -238,7 +250,12 @@ function showList(){
   // Прочитане на информацията от обекта и отпечатване на един ред
   let output = '';
   for (const key in letterToDigit) {
-    output += ` ${letterToDigit[key]} - ${key} /`;
+
+    var letter = letterToDigit[key];
+
+    if(usedLetters.includes(letter)){
+      output += ` ${letter} - ${key} /`;
+    }
   }
 
   // Записване на резултата в текстовото поле
@@ -312,40 +329,41 @@ function getSelectedText(element) {
   return element.value.substring(start, end).trim();
 }
 
-function deleteTable() {
-  var table = document.getElementById('table-task'); // Идентификация на таблицата, която искате да изтриете
+function deleteElement() {
+  var table = document.getElementById('table-task'); // Идентификация на елемента, която искаме да изтрием
+  deleteElements(table);
 
-  while (table.firstChild) {
-    table.firstChild.remove(); // Изтриване на първия дете елемент (ред) докато има такива
-  }
-
-  var table2 = document.getElementById('table2-task'); // Идентификация на таблицата, която искате да изтриете
-
-  while (table2.firstChild) {
-    table2.firstChild.remove(); // Изтриване на първия дете елемент (ред) докато има такива
-  }
+  var table2 = document.getElementById('table2-task');
+  deleteElements(table2);
 
   var tbody = document.getElementById('letters-container');
-  while (tbody.firstChild) {
-    tbody.removeChild(tbody.firstChild); // Изтриване на първия ред от tbody
-    //tbody.firstChild.remove();
-  }
-  //tbody.innerHTML = "";
+  deleteElements(tbody);
 }
 
+
+function deleteElements(element) {
+  while (element.firstChild) {
+    element.firstChild.remove();  // Изтриване на първия дете елемент (ред) докато има такива
+  }
+}
 
 function reloadGame(){
   usedLetters = "";
   letterToDigit = {};
   secondMassive = [];
-  
-  inputParameters();
-  deleteTable();
+
+  inputAndSetParameters();
+  deleteElement();
   generateExpression();
   setTableLetterWithDigits();
 }
 
-inputParameters();
-//setParameters();
-generateExpression();
-setTableLetterWithDigits();
+function initializeGame(){
+  inputAndSetParameters();
+  //setParameters();
+  generateExpression();
+  setTableLetterWithDigits();
+}
+
+
+initializeGame();
