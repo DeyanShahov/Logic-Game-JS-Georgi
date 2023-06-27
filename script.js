@@ -1,7 +1,8 @@
 var firstParameter, secondParameter, result;
-var secondMassive = [];
-var letterToDigit = {};
-var usedLetters = '';
+var secondMassive = []; // Втория множител представен като масив
+var letterToDigit = {}; // Списък с записани Букви към Цифри 
+var usedLetters = ''; // Текст с използваните букви  
+var letterMatrix = []; // Празен масив за бъдещата таблица
 
 function inputAndSetParameters(inputNumber){
 
@@ -81,7 +82,7 @@ function setParameters(number){
 
 function generateExpression() {
 
-    // Създаване на списък с латинските букви, разбъркване и вземане на парвите 10
+    // Създаване на списък с латинските букви, разбъркване и вземане на първите 10
     var letters = Array.from({length: 26}, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i))
       .sort(() => Math.random() - 0.5)
       .slice(0, 10);
@@ -91,6 +92,7 @@ function generateExpression() {
       letterToDigit[index] = letter;
     });
   
+    // Обръщане на цифрите към букви
     var firstExpression = convertDigitsToLetter(firstParameter, letterToDigit);
     var secondExpression = convertDigitsToLetter(secondParameter, letterToDigit);
 
@@ -98,12 +100,9 @@ function generateExpression() {
     usedLetters += firstExpression;
     usedLetters += secondExpression;
     
-    var expression = firstExpression + ' * ' + secondExpression;
+    var expression = firstExpression + ' * ' + secondExpression; 
 
-    // Празен арай за бъдещата таблица
-    var letterMatrix = []; 
-
-    // Добавяне към таблицата на суб арай с буквите за умножението на двата множителя
+    // Добавяне към таблицата на суб масив с буквите за умножението на двата множителя
     letterMatrix.push(expression.split('')); 
 
     // Дължина на израза за умножението на множителите
@@ -317,6 +316,9 @@ function executeCommand() {
     case "showList":
       showList();
       break;
+    case "clear":
+      clearTextarea();
+      break;
     default:
       console.log('Невалидна команда');
       break;
@@ -347,15 +349,50 @@ function deleteElements(element) {
   }
 }
 
+function clearTextarea() {
+  var textarea = document.getElementById('Textarea');
+  textarea.value = '';
+}
+
 function reloadGame(){
   usedLetters = "";
   letterToDigit = {};
   secondMassive = [];
+  letterMatrix = [];
 
   inputAndSetParameters();
   deleteElement();
   generateExpression();
   setTableLetterWithDigits();
+}
+
+function showSolution(){
+  var textArea = document.getElementById('Textarea');
+  var toReturn = '';
+
+  for (var i = 0; i < letterMatrix.length; i++) {
+    for (var j = 0; j < letterMatrix[i].length; j++) {
+      var letter = letterMatrix[i][j];
+      
+
+      if (/[a-zA-Z]/.test(letter)) {      
+        var values = Object.values(letterToDigit);
+        if(values.includes(letter)){
+          Object.entries(letterToDigit).forEach(([key, value]) => {
+            if (value === letter) toReturn += key
+          })
+        }
+      }else if('*' === letter){
+        toReturn += '*';
+      }else {
+        toReturn += '_';
+      }
+    }
+    toReturn += '\n';
+  };
+
+  // Записване на резултата в текстовото поле
+  textArea.value += '\n' + toReturn;
 }
 
 function initializeGame(){
