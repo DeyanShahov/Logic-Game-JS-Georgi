@@ -345,7 +345,7 @@ function getSelectedText(element) {
   return element.value.substring(start, end).trim();
 }
 
-function deleteElement() {
+function deleteAllTables() {
   var table = document.getElementById('table-task'); // Идентификация на елемента, която искаме да изтрием
   deleteElements(table);
 
@@ -373,9 +373,10 @@ function reloadGame(){
   letterToDigit = {};
   secondMassive = [];
   letterMatrix = [];
+  digitsMatrix = [];
 
   inputAndSetParameters();
-  deleteElement();
+  deleteAllTables();
   generateExpression();
   setTableLetterWithDigits();
 }
@@ -390,6 +391,71 @@ function showSolution(){
   }else{
     printMatrix(letterMatrix);
     solutionButtonFase = true;
+  }
+}
+
+function saveGame(){
+  var toSave = {
+    firstParameter : firstParameter,
+    secondParameter : secondParameter,
+    result : result,
+    secondMassive : secondMassive,
+    letterToDigit : letterToDigit,
+    usedLetters : usedLetters,
+    letterMatrix : letterMatrix,
+    digitsMatrix : digitsMatrix,
+    solutionButtonFase : solutionButtonFase
+  };
+
+  // Преобразуване на масива в JSON
+  var json = JSON.stringify(toSave);
+
+  // Записване на JSON в localStorage
+  localStorage.setItem('game', json);
+
+  // Получаване на референция към текстовото поле с клас "fixed-bottom"
+  const textArea = document.querySelector('.fixed-bottom'); 
+
+  // Записване на резултата в текстовото поле
+  textArea.value += '\n' + 'Играта е запаметена!';
+}
+
+function loadGame(){
+  // Получаване на референция към текстовото поле с клас "fixed-bottom"
+  const textArea = document.querySelector('.fixed-bottom'); 
+
+  if (localStorage.getItem('game') !== null) {
+    // Взимане на JSON от localStorage
+    var storedJson = localStorage.getItem('game');
+
+    // Преобразуване на JSON в масиви
+    var gameData = JSON.parse(storedJson);
+
+    // Презаписване на данните от фаила към текущата игра 
+    firstParameter = gameData.firstParameter,
+    secondParameter = gameData.secondParameter;
+    result = gameData.result;
+    secondMassive = gameData.secondMassive;
+    letterToDigit = gameData.letterToDigit;
+    usedLetters = gameData.usedLetters;
+    letterMatrix = gameData.letterMatrix;
+    digitsMatrix = gameData.digitsMatrix;
+    solutionButtonFase = gameData.solutionButtonFase;
+
+    // Премахване на старата визуализация
+    deleteAllTables()
+
+    // Стартиране на играта използвайки данните
+    printMatrix(letterMatrix);
+    setFieldForSolution(letterMatrix);
+    setTableLetterWithDigits();
+
+    // Използване на масивите
+    console.log(gameData);
+    textArea.value += '\n' + 'Играта е заредена!';
+  } else {
+    // Записване на резултата в текстовото поле
+    textArea.value += '\n' + 'Няма запаметена игра!';
   }
 }
 
