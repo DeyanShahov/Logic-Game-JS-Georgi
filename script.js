@@ -2,7 +2,9 @@ var firstParameter, secondParameter, result;
 var secondMassive = []; // Втория множител представен като масив
 var letterToDigit = {}; // Списък с записани Букви към Цифри 
 var usedLetters = ''; // Текст с използваните букви  
-var letterMatrix = []; // Празен масив за бъдещата таблица
+var letterMatrix = []; // Празен масив за бъдещата таблица с букви
+var digitsMatrix = []; // Празен масив за бъдещата таблица с цифри
+var solutionButtonFase = true; // Текущо състояние на бутона за резултат
 
 function inputAndSetParameters(inputNumber){
 
@@ -91,6 +93,9 @@ function generateExpression() {
     letters.forEach((letter, index) => {
       letterToDigit[index] = letter;
     });
+
+    // Добавяне на цифрите към масива за цифри
+    digitsMatrix.push((firstParameter + ' * ' + secondParameter ).split(''))
   
     // Обръщане на цифрите към букви
     var firstExpression = convertDigitsToLetter(firstParameter, letterToDigit);
@@ -112,18 +117,23 @@ function generateExpression() {
     for (var i = 0; i < secondMassive.length; i++) {
       var sum = firstParameter * secondMassive[i];
       var sumToString = convertDigitsToLetter(sum, letterToDigit)
-      var textResult = ' '.repeat(rowLength - sum.toString().length - i) + sumToString;
+      var sumText = ' '.repeat(rowLength - sum.toString().length - i) + sumToString;
       usedLetters += sumToString;
-      var subArray = textResult.split('');
+      var subArray = sumText.split('');
       letterMatrix.push(subArray);
+
+      var test = ' '.repeat(rowLength - sum.toString().length - i) + sum;
+      digitsMatrix.push(test.split(''));
     }
   
     // Преобразуване на резултата от умножението в букви
-    var textResult = convertDigitsToLetter(result, letterToDigit);
+    var sumResult = convertDigitsToLetter(result, letterToDigit);
     // Добавяне на резултата кам списъка с изпоплзваните букви
-    usedLetters += textResult;
-    // Изчисляване на дължината на краиния резултат и преобразужането му в маасив
-    var textResultToPrint = (' '.repeat(rowLength - result.toString().length) + textResult).split('');
+    usedLetters += sumResult;
+    // Изчисляване на дължината на краиния резултат и преобразужането му в маасив от букви
+    var textResultToPrint = (' '.repeat(rowLength - result.toString().length) + sumResult).split('');
+
+    digitsMatrix.push((' '.repeat(rowLength - result.toString().length) + result).split(''));
 
     // Добавяне към таблицата на суб арай с буквите за резултата от умножението на двата множителя
     letterMatrix.push(textResultToPrint)
@@ -131,23 +141,27 @@ function generateExpression() {
     // Добавяне на знака '+' в масива от данни, за по добра визуализация на действията
     letterMatrix[Math.ceil(secondMassive.length / 2)][0] = '+';
 
-    const table = document.querySelector('table');
-
-    // Изграждане на таблица спрямо данните от матрицата с букви ("letterMatrix")
-    letterMatrix.forEach((x, index) => {
-      const row = document.createElement('tr');
-      // Добавяне на подчертавания под парвия и преди последния ред в таблицата
-      if(index == 0 || index == secondMassive.length) row.classList.add("border-between-rows");
-
-      x.forEach(letter => {
-        const cell = document.createElement('td');
-        cell.textContent = letter;
-        row.appendChild(cell);
-      });
-      table.appendChild(row);
-    });
+    printMatrix(letterMatrix);
 
     setFieldForSolution(letterMatrix);
+}
+
+function printMatrix( matrix ) {
+  const table = document.querySelector('table');
+
+  // Изграждане на таблица спрямо данните от подадената матрицата
+  matrix.forEach((x, index) => {
+    const row = document.createElement('tr');
+    // Добавяне на подчертавания под парвия и преди последния ред в таблицата
+    if (index == 0 || index == secondMassive.length) row.classList.add("border-between-rows");
+
+    x.forEach(letter => {
+      const cell = document.createElement('td');
+      cell.textContent = letter;
+      row.appendChild(cell);
+    });
+    table.appendChild(row);
+  });
 }
 
 function convertDigitsToLetter(number, letterToDigit) {
@@ -367,32 +381,16 @@ function reloadGame(){
 }
 
 function showSolution(){
-  var textArea = document.getElementById('Textarea');
-  var toReturn = '';
+  var table = document.getElementById('table-task'); // Идентификация на елемента, която искаме да изтрием
+  deleteElements(table);
 
-  for (var i = 0; i < letterMatrix.length; i++) {
-    for (var j = 0; j < letterMatrix[i].length; j++) {
-      var letter = letterMatrix[i][j];
-      
-
-      if (/[a-zA-Z]/.test(letter)) {      
-        var values = Object.values(letterToDigit);
-        if(values.includes(letter)){
-          Object.entries(letterToDigit).forEach(([key, value]) => {
-            if (value === letter) toReturn += key
-          })
-        }
-      }else if('*' === letter){
-        toReturn += '*';
-      }else {
-        toReturn += '_';
-      }
-    }
-    toReturn += '\n';
-  };
-
-  // Записване на резултата в текстовото поле
-  textArea.value += '\n' + toReturn;
+  if(solutionButtonFase){
+    printMatrix(digitsMatrix);
+    solutionButtonFase = false;
+  }else{
+    printMatrix(letterMatrix);
+    solutionButtonFase = true;
+  }
 }
 
 function initializeGame(){
