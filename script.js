@@ -427,6 +427,7 @@ function reloadGame(){
   deleteAllTables();
   generateExpression();
   setTableLetterWithDigits();
+  runTimer();
 }
 
 function showSolution(){
@@ -447,6 +448,39 @@ function clearTable(){
   deleteElements(tbody);
 
   setTableLetterWithDigits();
+}
+
+function runTimer(){
+   // Функция за форматиране на числото с водеща нула
+   function formatNumber(number) {
+    return number < 10 ? "0" + number : number;
+  }
+
+  // Функция за обновяване на таймера
+  function updateTimer() {
+    var currentTime = new Date();
+    var elapsedTime = currentTime - startTime;
+
+    // Пресмятане на изминалото време в часове, минути и секунди
+    var hours = Math.floor(elapsedTime / 3600000);
+    var minutes = Math.floor((elapsedTime % 3600000) / 60000);
+    var seconds = Math.floor((elapsedTime % 60000) / 1000);
+
+    // Форматиране на числата с водеща нула
+    var formattedHours = formatNumber(hours);
+    var formattedMinutes = formatNumber(minutes);
+    var formattedSeconds = formatNumber(seconds);
+
+    // Показване на времето във формата "час : минути : секунди"
+    document.getElementById("timer").textContent = formattedHours + " : " + formattedMinutes + " : " + formattedSeconds;
+
+    // Повтаряне на функцията за обновяване на таймера на следващият тик
+    requestAnimationFrame(updateTimer);
+  }
+
+  // Запазване на стартовата дата и стартиране на таймера
+  var startTime = new Date();
+  updateTimer();
 }
 
 function checkLastPosibleDigit(row){
@@ -547,6 +581,7 @@ function initializeGame(){
   //setParameters();
   generateExpression();
   setTableLetterWithDigits();
+  runTimer();
 }
 
 
