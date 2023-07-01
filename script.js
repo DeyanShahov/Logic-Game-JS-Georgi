@@ -200,13 +200,15 @@ function setTableLetterWithDigits( game = 'new'){
 
   function toggleMark(event) {
     var cell = event.target;
+    let row = cell.dataset.row;
+    let coll = cell.dataset.coll;
 
     if (cell.tagName === 'SPAN' && cell.classList.contains('digit')) {
       cell.classList.toggle('marked');
-      var isTrue = tableLetterWithDigitsMatrix[cell.dataset.row][cell.dataset.coll];
-      tableLetterWithDigitsMatrix[cell.dataset.row][cell.dataset.coll] = isTrue ? false : true;
+      let isTrue = tableLetterWithDigitsMatrix[row][coll];
+      tableLetterWithDigitsMatrix[row][coll] = isTrue ? false : true;
 
-      checkLastPosibleDigit(cell.dataset.row);
+      checkLastPosibleDigit(row);
     }
   }
 
@@ -448,8 +450,8 @@ function clearTable(){
 }
 
 function checkLastPosibleDigit(row){
-  var falseCount = 0;
-  var falseIndex = -1;
+  let falseCount = 0;
+  let falseIndex = -1;
 
   for (let index = 0; index < tableLetterWithDigitsMatrix[row].length; index++) {
     if(tableLetterWithDigitsMatrix[row][index] === false){
@@ -460,12 +462,15 @@ function checkLastPosibleDigit(row){
     if (falseCount > 1 ) break;
   }
 
-  if (falseCount === 1) {
-    var lettersContainer = document.getElementById('letters-container');
-    var cell = lettersContainer.rows[row].cells[0];
-    var cellOldTContent = cell.textContent;
+  let lettersContainer = document.getElementById('letters-container');
+  let cell = lettersContainer.rows[row].cells[0];
+  let cellOldTContent = cell.textContent;
+
+  if (falseCount === 1) {    
     cell.textContent = (falseIndex + 1 === 10 ? 0 : falseIndex + 1) + '/' + cellOldTContent[cellOldTContent.length - 1];
-  }  
+  } else {
+    cell.textContent = '?/' + cellOldTContent[cellOldTContent.length - 1]; 
+  }
 }
 
 function saveGame(){
