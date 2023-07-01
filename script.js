@@ -205,6 +205,8 @@ function setTableLetterWithDigits( game = 'new'){
       cell.classList.toggle('marked');
       var isTrue = tableLetterWithDigitsMatrix[cell.dataset.row][cell.dataset.coll];
       tableLetterWithDigitsMatrix[cell.dataset.row][cell.dataset.coll] = isTrue ? false : true;
+
+      checkLastPosibleDigit(cell.dataset.row);
     }
   }
 
@@ -248,7 +250,7 @@ function setTableLetterWithDigits( game = 'new'){
         }  
         
         // Ако играте е от тип Заредена, то да попални ако има маркирани полета из таблицата
-        if(game === 'load' && tableLetterWithDigitsMatrix[i][j-2]) digitSpan.classList.toggle('marked');
+        if(game === 'load' && tableLetterWithDigitsMatrix[i][j-2]) digitSpan.classList.toggle('marked'); 
       }    
 
       row.addEventListener('mousedown', toggleMark);
@@ -261,9 +263,14 @@ function setTableLetterWithDigits( game = 'new'){
   for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
     var letter = uniqueUsedLettersArray[i];
     var cell = document.createElement('td');
-    cell.textContent = letter;
-
+    cell.textContent = '?/' + letter;
     rows[i].insertBefore(cell, rows[i].firstChild);
+  }
+
+  if(game === 'load'){
+    for (let index = 0; index < uniqueUsedLettersArray.length; index++) {
+      checkLastPosibleDigit(index);    
+    }
   }
 }
 
@@ -438,6 +445,27 @@ function clearTable(){
   deleteElements(tbody);
 
   setTableLetterWithDigits();
+}
+
+function checkLastPosibleDigit(row){
+  var falseCount = 0;
+  var falseIndex = -1;
+
+  for (let index = 0; index < tableLetterWithDigitsMatrix[row].length; index++) {
+    if(tableLetterWithDigitsMatrix[row][index] === false){
+      falseCount++;
+      falseIndex = index;
+    }
+
+    if (falseCount > 1 ) break;
+  }
+
+  if (falseCount === 1) {
+    var lettersContainer = document.getElementById('letters-container');
+    var cell = lettersContainer.rows[row].cells[0];
+    var cellOldTContent = cell.textContent;
+    cell.textContent = (falseIndex + 1 === 10 ? 0 : falseIndex + 1) + '/' + cellOldTContent[cellOldTContent.length - 1];
+  }  
 }
 
 function saveGame(){
