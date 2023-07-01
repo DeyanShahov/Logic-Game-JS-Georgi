@@ -6,6 +6,7 @@ var letterMatrix = []; // Празен масив за бъдещата табл
 var digitsMatrix = []; // Празен масив за бъдещата таблица с цифри
 var solutionButtonFase = true; // Текущо състояние на бутона за резултат
 var solutionMatrix = []; // Празен масив за бъдещата таблица за въвеждане на евентуални отговори
+var tableLetterWithDigitsMatrix = [] // Празен масив за състоянието на клетките маркирани ли са или не
 
 function inputAndSetParameters(inputNumber){
 
@@ -40,7 +41,6 @@ function inputAndSetParameters(inputNumber){
   // Преобразуване на втория множител в текстов масив от данни
   secondMassive = secondParameter.toString().split('').reverse().map(Number);
 }
-
 
 function setParameters(number){
     
@@ -180,7 +180,7 @@ function convertDigitsToLetter(number, letterToDigit) {
     return toPrint;
 }
 
-function setTableLetterWithDigits(){
+function setTableLetterWithDigits( game = 'new'){
   var scaleSlider = document.getElementById('scale-slider');
   var tableContainer1 = document.getElementById('table-container');
   var tableContainer2 = document.getElementById('table-task');
@@ -203,6 +203,8 @@ function setTableLetterWithDigits(){
 
     if (cell.tagName === 'SPAN' && cell.classList.contains('digit')) {
       cell.classList.toggle('marked');
+      var isTrue = tableLetterWithDigitsMatrix[cell.dataset.row][cell.dataset.coll];
+      tableLetterWithDigitsMatrix[cell.dataset.row][cell.dataset.coll] = isTrue ? false : true;
     }
   }
 
@@ -210,12 +212,18 @@ function setTableLetterWithDigits(){
 
   var uniqueUsedLettersArray = filterUniqueLetters(); // Обединяване на уникалните символи в низ
 
+  // Създавам нов празен масив ( попалнен със стоиноста false) за маркирване да се запаметява при saveGame
+  if(game === 'new') tableLetterWithDigitsMatrix = Array.from({ length: uniqueUsedLettersArray.length }, 
+      () => Array.from({ length: 10 }, () => false));
+
   for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
       var row = document.createElement('tr');
 
       for (var j = 1; j <= 11; j++) {
         var digitCell = document.createElement('td');
         var digitSpan = document.createElement('span');
+        digitSpan.setAttribute('data-row', i);
+        digitSpan.setAttribute('data-coll', j - 2);
  
         switch(j){
           case 1:
@@ -235,15 +243,19 @@ function setTableLetterWithDigits(){
              digitSpan.classList.add('digit');
              digitSpan.setAttribute('data-digit', j - 1);
              digitCell.appendChild(digitSpan);
-             row.appendChild(digitCell);
+             row.appendChild(digitCell);             
             break;
-        }      
-      }
+        }  
+        
+        // Ако играте е от тип Заредена, то да попални ако има маркирани полета из таблицата
+        if(game === 'load' && tableLetterWithDigitsMatrix[i][j-2]) digitSpan.classList.toggle('marked');
+      }    
 
       row.addEventListener('mousedown', toggleMark);
       lettersContainer.appendChild(row);
     }
 
+  //  Добавям буква в началото на всеки ред
   var rows = lettersContainer.getElementsByTagName('tr');
 
   for (var i = 0; i < uniqueUsedLettersArray.length; i++) {
@@ -327,10 +339,7 @@ function createInputField(cell, game) {
   {
     var isNumber = solutionMatrix[cell.dataset.row][cell.dataset.coll];
 
-    if(!isNaN(isNumber))
-    {
-      input.value = isNumber;
-    }
+    if(!isNaN(isNumber)) input.value = isNumber;
   };
 
   input.addEventListener('input', () => {
@@ -403,6 +412,7 @@ function reloadGame(){
   letterMatrix = [];
   digitsMatrix = [];
   solutionMatrix = [];
+  tableLetterWithDigitsMatrix = [];
 
   inputAndSetParameters();
   deleteAllTables();
@@ -441,7 +451,8 @@ function saveGame(){
     letterMatrix : letterMatrix,
     digitsMatrix : digitsMatrix,
     solutionButtonFase : solutionButtonFase,
-    solutionMatrix : solutionMatrix
+    solutionMatrix : solutionMatrix,
+    tableLetterWithDigitsMatrix : tableLetterWithDigitsMatrix
   };
 
   // Преобразуване на масива в JSON
@@ -479,6 +490,7 @@ function loadGame(){
     digitsMatrix = gameData.digitsMatrix;
     solutionButtonFase = gameData.solutionButtonFase;
     solutionMatrix = gameData.solutionMatrix;
+    tableLetterWithDigitsMatrix = gameData.tableLetterWithDigitsMatrix;
 
     // Премахване на старата визуализация
     deleteAllTables()
@@ -486,10 +498,9 @@ function loadGame(){
     // Стартиране на играта използвайки данните
     printMatrix(letterMatrix);
     setFieldForSolution(letterMatrix, 'load');
-    setTableLetterWithDigits();
+    setTableLetterWithDigits('load');
 
     // Използване на масивите
-    console.log(gameData);
     textArea.value += '\n' + 'Играта е заредена!';
   } else {
     // Записване на резултата в текстовото поле
